@@ -9,18 +9,19 @@
 * Rename the "src" folder to "client"
 * Create a "client" folder under "e2e" and move existing files in "e2e" under it
 * Make the following updates to Angular's config files:
-    * `angular.json`
-        * Change `"sourceRoot"` to `"client"`
-        * Change any references to `"src/<something>"` further in the file to `"client/<something>"`
-        * Change any references to `"e2e/<something>"` in the `"e2e"` target to `"e2e/client/<something>"`
-    * `tsconfig.app.json`:
-        * Change any references to `"src/<something>"` to `"client/<something>"`. `"OutDir"` is overridden by angular.json
-    * `tsconfig.spec.json`:
-        * Change any references to `"src/<something>"` to `"client/<something>"`. `"OutDir"` is overridden by angular.json
-    * `e2e/client/protractor.conf.js`:
-        * Change `"capabilities"` from `["chrome"]` to your browser of choice if required.
-    * `e2e/client/protractor.conf.js` (Optional: We will be changing to Cypress later on but this makes for a good sanity test of these config changes):
-        * Change `"capabilities"` from `["chrome"]` to your browser of choice if required. You may need to run `node node_modules/protractor/bin/webdriver-manager update` after this
+
+    | File | Changes |
+    |------|---------|
+    |`angular.json` | Change `sourceRoot` to `"client"` |
+    ||Change any references to `src/<something>` further in the file to `client/<something>` |
+    ||Change any references to `e2e/<something>` in the `e2e` target to `e2e/client/<something>`|
+    ||To enable Karma code coverage, add `"codeCoverage": true` to the `test` target's options|
+    |`tsconfig.app.json`|Change any references to `src/<something>` to `client/<something>`. `OutDir` is overridden by angular.json |
+    |`tsconfig.spec.json`| Change any references to `src/<something>` to `client/<something>`. `OutDir` is overridden by angular.json |
+    |`e2e/client/tsconfig.json`| Change `extends` to `"../../tsconfig.json"` |
+    |`e2e/client/protractor.conf.js`| (Optional: We will be switching to Cypress later) Change `capabilities` from `["chrome"]` to your browser of choice if desired. You may need to run `node node_modules/protractor/bin/webdriver-manager update` afterwards. Note that in Firefox, the `afterEach` call in `e2e/client/src/app.e2e-spec.ts` may cause a "HTTP method is not allowed" error. Removing the `afterEach` block will fix this |
+    |`karma.conf.js`| If you aren't using Chrome, install the appropriate Karma launcher (e.g. `karma-firefox-launcher`) and add it to the `plugins` array. Update the `browsers` array as well |
+
 
 ## Running the Angular project
 To ensure our changes above have worked, run the following Angular commands and ensure that you can build, run, and test the application with the new configuration. Ensure that the builds are created under `dist/client` and `e2e/client` for running and testing, respectively.
