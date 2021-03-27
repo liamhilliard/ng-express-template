@@ -1,0 +1,11 @@
+{
+    "fileServerFolder": ".",
+    "fixturesFolder": "./fixtures",
+    "integrationFolder": "./integration",
+    "pluginsFile": "./plugins/index",
+    "supportFile": false,
+    "video": true,
+    "videosFolder": "../../dist/cypress/client/videos",
+    "screenshotsFolder": "../../dist/cypress/client/screenshots",
+    "chromeWebSecurity": false
+}

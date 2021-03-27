@@ -113,8 +113,8 @@
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "e2e/cypress.json",
-			"tsConfig": "e2e/tsconfig.e2e.json",
+            "cypressConfig": "e2e/cypress/cypress.json",
+			"tsConfig": "e2e/cypress/tsconfig.e2e.json",
             "devServerTarget": "client:serve"
           },
           "configurations": {
