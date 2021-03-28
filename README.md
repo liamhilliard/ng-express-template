@@ -23,7 +23,7 @@
     |`karma.conf.js`| If you aren't using Chrome, install the appropriate Karma launcher (e.g. `karma-firefox-launcher`) and add it to the `plugins` array. Update the `browsers` array as well |
 
 
-## Running the Angular project
+### Running the Angular project
 To ensure our changes above have worked, run the following Angular commands and ensure that you can build, run, and test the application with the new configuration. Ensure that the builds are created under `dist/client` and `e2e/client` for running and testing, respectively.
 * `ng build`
 * `ng serve --open`
@@ -32,7 +32,7 @@ To ensure our changes above have worked, run the following Angular commands and 
 * `ng e2e`
 
 
-# Install Cypress as the E2E Test Runner (Optional)
+### Install Cypress as the E2E Test Runner (Optional)
 * Install cypress and the nrwl dependencies with `npm i -D cypress @nrwl/workspace @nrwl/cypress`
 * Edit and create the following files:
 * Edit `angular.json` and update the configuration of the e2e target:
@@ -130,5 +130,49 @@ To ensure our changes above have worked, run the following Angular commands and 
 * Run ng e2e and watch the test run
 
 ## Typescript and Express
+
+### Installation
 * Angular projects come with the `typescript` and `@types/node` packages installed. If you do not have Typescript installed globally, run `npm i -g typescript`
-* Install express (server framework), helmet (security middleware), and related Typescript declarations with `npm i express helmet` (project dependencies) and `npm i -D @types/express @types/helmet` (dev dependencies)
+* Install Express (server framework), Helmet (security middleware), and Dotenv (config module) with `npm i express helmet dotenv`
+* Install Express, Helmet, and Dotenv's related Typescript declarations with `npm i -D @types/express @types/helmet @types/dotenv`
+* Create a "server" folder at the top level of the project
+* Create a `server/tsconfig.json` with the following content:
+    ```json
+    {
+    "extends": "../tsconfig.json",
+        "compilerOptions": {
+            "target": "es5",
+            "outDir": "../dist/server",
+            "module": "CommonJS"
+        }
+    }
+    ```
+* Create a `.env` file at the root level of your project containing the line `PORT=7077`
+* Create a `server/index.js` file with the following content:
+    ```typescript
+    import { Request, Response } from "express";
+
+    const express = require('express')
+    const helmet = require('helmet')
+    const config = require('dotenv').config();
+
+    if(config.error){
+        throw config.error
+    }
+
+    const PORT:number = parseInt(process.env.PORT as string)
+
+    const app = express()
+    app.use(express.json())
+    app.use(helmet())
+    app.get('/', (req: Request, res: Response) => {
+        res.send(`Express + TS`)
+    })
+    app.listen(PORT, () => {
+        console.log(`server listening on port ${PORT}`)
+    })
+
+    export {app}
+    ```
+* Compile and run this server with `tsc -p server && node dist/server/index.js` and connect to your server on `http://localhost:7077`. You should see your message "Express + TS"
+
