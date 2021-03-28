@@ -135,13 +135,16 @@ To ensure our changes above have worked, run the following Angular commands and 
 * Angular projects come with the `typescript` and `@types/node` packages installed. If you do not have Typescript installed globally, run `npm i -g typescript`
 * Install Express (server framework), Helmet (security middleware), and Dotenv (config module) with `npm i express helmet dotenv`
 * Install Express, Helmet, and Dotenv's related Typescript declarations with `npm i -D @types/express @types/helmet @types/dotenv`
+* Install Chai, Mocha, Supertest, and their declarations with `npm i -D mocha @types/mocha chai @types/chai supertest @types/supertest`
+* Install TS-Node with `npm i -D ts-node`. We will use this to run our tests
 * Create a "server" folder at the top level of the project
 * Create a `server/tsconfig.json` with the following content:
     ```json
     {
-    "extends": "../tsconfig.json",
+        "extends": "../tsconfig.json",
         "compilerOptions": {
-            "target": "es5",
+            "esModuleInterop": true,
+            "target": "es6",
             "outDir": "../dist/server",
             "module": "CommonJS"
         }
@@ -168,11 +171,38 @@ To ensure our changes above have worked, run the following Angular commands and 
     app.get('/', (req: Request, res: Response) => {
         res.send(`Express + TS`)
     })
-    app.listen(PORT, () => {
-        console.log(`server listening on port ${PORT}`)
-    })
 
-    export {app}
+    // Check module.parent to stop supertest starting a second server
+    if(!module.parent){
+        app.listen(PORT, () => {
+            console.log(`server listening on port ${PORT}`)
+        })
+    }
+
+    export default app
     ```
 * Compile and run this server with `tsc -p server && node dist/server/index.js` and connect to your server on `http://localhost:7077`. You should see your message "Express + TS"
+* Create a `server/index.spec.ts` file with the following content:
+    ```typescript
+    import {expect} from 'chai'
+    import app from './index'
+    import supertest from 'supertest'
+    import 'mocha'
 
+    describe('index', function() {
+        it('GET / should return text', function(done){
+            supertest(app)
+            .get('/')
+            .expect(200)
+            .end((err, res)=> {
+                expect(res.text).to.equal('Express + TS')
+                done()
+            })
+        })
+    })
+    ```
+* Add the following script to your `package.json`:
+    ```json
+    "mocha": "env TS_NODE_PROJECT='server/tsconfig.json' node node_modules/.bin/mocha -r ts-node/register -w 'server/**/*.ts' --watch-files 'server/**/*.ts'"
+    ```
+* This will watch all server files for changes and automatically run the test suite. Try it with `npm run mocha`
