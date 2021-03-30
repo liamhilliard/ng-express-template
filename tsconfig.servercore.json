@@ -1,0 +1,18 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "strict": true,
+        "noImplicitAny": true,
+        "target": "es6",
+        "outDir": "dist",
+        "module": "CommonJS",
+        "esModuleInterop": true
+    },
+    "include": [
+        "server",
+        "core"
+    ],
+    "exclude": [
+        "client"
+    ]
+}

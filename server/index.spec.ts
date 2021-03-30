@@ -3,14 +3,15 @@ import app from './index'
 import supertest from 'supertest'
 import 'mocha'
 
-describe('something', function() {
-    it('should do something', function(done){
+describe('something', () => {
+    it('should do something', (done) => {
         supertest(app)
         .get('/')
         .expect(200)
-        .end((err, res)=> {
+        .end((err, res) => {
+            if (err) { return done(err) }
             expect(res.text).to.equal('Express + TS')
-            done()
+            return done()
         })
     })
 })

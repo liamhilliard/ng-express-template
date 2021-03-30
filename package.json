@@ -8,8 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "mocha": "node node_modules/.bin/ts-mocha -p server/tsconfig.json -w --watch-files server/**/*.spec.ts",
-    "mochats": "env TS_NODE_PROJECT='server/tsconfig.json' node node_modules/.bin/mocha -r ts-node/register -w 'server/**/*.ts' --watch-files 'server/**/*.ts'"
+    "mocha": "node node_modules/.bin/ts-mocha -p tsconfig.servercore.json -w **/*.spec.ts --watch-files **/*.spec.ts"
   },
   "private": true,
   "dependencies": {
